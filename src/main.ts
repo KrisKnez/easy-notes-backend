@@ -1,7 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as nestjsSwaggerPackageJson from '@nestjs/swagger/package.json';
+const swaggerVersion = nestjsSwaggerPackageJson.dependencies['swagger-ui-dist'];
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,7 +33,10 @@ async function bootstrap() {
     }),
   );
 
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    customCss: `https://cdn.jsdelivr.net/npm/swagger-ui-dist@${swaggerVersion}/swagger-ui.css`,
+    customJs: `https://cdn.jsdelivr.net/npm/swagger-ui-dist@${swaggerVersion}/swagger-ui-bundle.js`,
+  });
 
   await app.listen(3000);
 }
