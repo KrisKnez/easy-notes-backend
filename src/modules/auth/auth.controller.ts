@@ -52,6 +52,8 @@ export class AuthController {
 
     response.cookie('auth', '', {
       expires: new Date(),
+      sameSite: 'none',
+      secure: true,
     });
 
     response.send(user);
