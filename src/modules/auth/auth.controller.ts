@@ -26,7 +26,7 @@ export class AuthController {
     const { user, token } = await this.authService.login(loginDto);
 
     response.cookie('auth', token, {
-      sameSite: 'lax',
+      sameSite: 'none',
     });
 
     response.send(plainToClass(RetrieveUserDto, user));
