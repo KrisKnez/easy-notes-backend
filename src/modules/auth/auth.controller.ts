@@ -27,6 +27,7 @@ export class AuthController {
 
     response.cookie('auth', token, {
       sameSite: 'none',
+      secure: true,
     });
 
     response.send(plainToClass(RetrieveUserDto, user));
