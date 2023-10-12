@@ -11,7 +11,7 @@ async function bootstrap() {
     origin: process.env.CORS_ORIGINS || true,
     credentials: true,
     preflightContinue: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
 
   const config = new DocumentBuilder()
