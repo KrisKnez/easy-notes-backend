@@ -16,11 +16,13 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto) {
-    const user = await this.prismaService.user.findFirstOrThrow({
+    const user = await this.prismaService.user.findFirst({
       where: {
         email: loginDto.email,
       },
     });
+
+    if (!user) throw new UnauthorizedException('Unknown Email');
 
     const password = hash.sha256().update(loginDto.password).digest('hex');
     if (user.password !== password)
