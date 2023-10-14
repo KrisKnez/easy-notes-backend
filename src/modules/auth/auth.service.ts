@@ -22,11 +22,11 @@ export class AuthService {
       },
     });
 
-    if (!user) throw new UnauthorizedException('Unknown Email');
+    if (!user) throw new UnauthorizedException(['email Unknown email']);
 
     const password = hash.sha256().update(loginDto.password).digest('hex');
     if (user.password !== password)
-      throw new UnauthorizedException('Incorrect password');
+      throw new UnauthorizedException(['password Incorrect password']);
 
     const token = this.jwtService.sign({
       user: plainToClass(RetrieveUserDto, user),
