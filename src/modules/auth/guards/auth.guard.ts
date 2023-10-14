@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
@@ -21,7 +26,7 @@ export class AuthGuard implements CanActivate {
 
     if (!authToken) {
       // If 'auth' cookie is not present, authentication fails
-      return false;
+      throw new UnauthorizedException();
     }
 
     try {
@@ -35,7 +40,7 @@ export class AuthGuard implements CanActivate {
       return true;
     } catch (error) {
       // If JWT verification fails, authentication fails
-      return false;
+      throw new UnauthorizedException();
     }
   }
 }
