@@ -28,7 +28,9 @@ export class UsersMeController {
 
   @Get()
   async me(@Request() request: RequestWithUser): Promise<RetrieveUserDto> {
-    const user = request.user;
+    const userId = request.user.id;
+
+    const user = this.userService.findOne(userId);
 
     return user;
   }

@@ -10,6 +10,7 @@ export class RetrieveUserDto implements User {
 
   name: string;
   bio: string;
+
   createdAt: Date;
   updatedAt: Date;
 }
