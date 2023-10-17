@@ -4,9 +4,11 @@ import { PrismaService } from 'src/services/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 
 import * as hash from 'hash.js';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { RetrieveUserDto } from '../users/dto/retrieve-user.dto';
 import { RegisterDto } from './dto/register.dto';
+
+import { AuthTokenDto } from './dto/auth-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -28,9 +30,7 @@ export class AuthService {
     if (user.password !== password)
       throw new UnauthorizedException(['password Incorrect password']);
 
-    const token = this.jwtService.sign({
-      user: plainToClass(RetrieveUserDto, user),
-    });
+    const token = await this.createToken(user);
 
     return {
       user,
@@ -48,9 +48,7 @@ export class AuthService {
       },
     });
 
-    const token = this.jwtService.sign({
-      user: plainToClass(RetrieveUserDto, user),
-    });
+    const token = await this.createToken(user);
 
     return {
       user,
@@ -58,11 +56,32 @@ export class AuthService {
     };
   }
 
-  async refresh(user: RetrieveUserDto) {
-    const token = this.jwtService.sign({
-      user: plainToClass(RetrieveUserDto, user),
-    });
+  async createToken(user: RetrieveUserDto) {
+    const authToken = plainToInstance(
+      AuthTokenDto,
+      this.jwtService.sign({
+        user: plainToClass(RetrieveUserDto, user),
+      }),
+    );
 
-    return token;
+    return authToken;
+  }
+
+  async validateToken(authToken: string) {
+    // Verify and decode the JWT
+    const decodedToken = plainToInstance(
+      AuthTokenDto,
+      this.jwtService.verify(authToken),
+    );
+
+    return decodedToken;
+  }
+
+  async refreshToken(authToken: string) {
+    const token = await this.validateToken(authToken);
+
+    const newAuthToken = await this.createToken(token.user);
+
+    return newAuthToken;
   }
 }

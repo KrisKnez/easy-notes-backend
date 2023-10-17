@@ -15,6 +15,7 @@ import { RetrieveUserDto } from '../users/dto/retrieve-user.dto';
 import { AuthGuard } from './guards/auth.guard';
 import { RequestWithUser } from './entities/request-with-user';
 import { RegisterDto } from './dto/register.dto';
+import authCookieOptions from './auth-cookie-options';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -37,7 +38,7 @@ export class AuthController {
   async register(@Body() registerDto: RegisterDto, @Res() response: Response) {
     const { user, token } = await this.authService.register(registerDto);
 
-    response.cookie('auth', token);
+    response.cookie('auth', token, authCookieOptions);
 
     response.send(plainToClass(RetrieveUserDto, user));
   }
@@ -50,11 +51,7 @@ export class AuthController {
   ): Promise<RetrieveUserDto> {
     const user = request.user;
 
-    response.cookie('auth', '', {
-      expires: new Date(),
-      sameSite: 'none',
-      secure: true,
-    });
+    response.cookie('auth', '', { ...authCookieOptions, expires: new Date() });
 
     response.send(user);
 

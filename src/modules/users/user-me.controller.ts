@@ -8,18 +8,21 @@ import {
   Patch,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { AuthGuard } from '../auth/guards/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+
+import * as cookie from 'cookie';
+
+import { AuthGuard } from '../auth/guards/auth.guard';
 import { RequestWithUser } from '../auth/entities/request-with-user';
 import { RetrieveUserDto } from './dto/retrieve-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { AuthService } from '../auth/auth.service';
 import { plainToClass } from 'class-transformer';
+import authCookieOptions from '../auth/auth-cookie-options';
 
 @ApiTags('users-me')
 @Controller('users/me')
-@UseGuards(AuthGuard)
 export class UsersMeController {
   constructor(
     private userService: UsersService,
@@ -27,15 +30,22 @@ export class UsersMeController {
   ) {}
 
   @Get()
-  async me(@Request() request: RequestWithUser): Promise<RetrieveUserDto> {
-    const userId = request.user.id;
+  async me(@Request() request): Promise<RetrieveUserDto | null> {
+    // Get the 'auth' token from the request cookie
+    const cookies = cookie.parse(request.headers.cookie || '');
+    const authToken = cookies.auth;
 
-    const user = this.userService.findOne(userId);
+    try {
+      const token = await this.authService.validateToken(authToken);
 
-    return user;
+      return token.user;
+    } catch (e) {
+      return null;
+    }
   }
 
   @Patch()
+  @UseGuards(AuthGuard)
   async updateMe(
     @Body() updateUserDto: UpdateUserDto,
     @Request() request: RequestWithUser,
@@ -48,9 +58,9 @@ export class UsersMeController {
       await this.userService.update(user.id, updateUserDto),
     );
 
-    const token = await this.authService.refresh(newUser);
+    const token = await this.authService.createToken(newUser);
 
-    response.cookie('auth', token);
+    response.cookie('auth', token, authCookieOptions);
 
     response.send(plainToClass(RetrieveUserDto, newUser));
 
