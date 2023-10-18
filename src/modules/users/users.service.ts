@@ -6,7 +6,7 @@ import { FilterUserDto } from './dto/filter-user.dto';
 import { plainToClass } from 'class-transformer';
 import { RetrieveUserDto } from './dto/retrieve-user.dto';
 
-import * as hash from 'hash.js';
+import * as bcrypt from 'bcrypt';
 import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
@@ -14,10 +14,13 @@ export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
   async create({ password, ...restCreateUserDto }: CreateUserDto) {
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt);
+
     return await this.prismaService.user.create({
       data: {
         ...restCreateUserDto,
-        password: hash.sha256().update(password).digest('hex'),
+        password: hashedPassword,
       },
     });
   }
@@ -69,44 +72,41 @@ export class UsersService {
     id: number,
     changePasswordDto: ChangePasswordDto,
   ): Promise<RetrieveUserDto> {
+    // Check if new passwords are the same
     if (changePasswordDto.newPassword !== changePasswordDto.repeatNewPassword)
       throw new BadRequestException([
         'repeatNewPassword New passwords do not match',
       ]);
 
-    const oldPassword = hash
-      .sha256()
-      .update(changePasswordDto.currentPassword)
-      .digest('hex');
-
-    const newPassword = hash
-      .sha256()
-      .update(changePasswordDto.newPassword)
-      .digest('hex');
-
-    if (oldPassword === newPassword)
+    // Check if new password is the same as current password
+    if (changePasswordDto.newPassword === changePasswordDto.currentPassword)
       throw new BadRequestException([
         'newPassword Cannot be the same as current password',
       ]);
 
+    // Check if current password is correct
     const user = await this.prismaService.user.findFirst({
       where: {
         id,
-        password: oldPassword,
       },
     });
+    if (!bcrypt.compareSync(changePasswordDto.currentPassword, user.password))
+      throw new BadRequestException(['currentPassword Incorrect password']);
 
-    if (!user)
-      throw new BadRequestException(['currentPassword Not current password']);
-
+    // Process with update
     try {
+      const salt = bcrypt.genSaltSync(10);
+      const hashedNewPassword = bcrypt.hashSync(
+        changePasswordDto.newPassword,
+        salt,
+      );
+
       return await this.prismaService.user.update({
         data: {
-          password: newPassword,
+          password: hashedNewPassword,
         },
         where: {
           id,
-          password: oldPassword,
         },
       });
     } catch (e) {

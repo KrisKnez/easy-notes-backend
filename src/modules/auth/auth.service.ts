@@ -3,7 +3,7 @@ import { LoginDto } from './dto/login.dto';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 
-import * as hash from 'hash.js';
+import * as bcrypt from 'bcrypt';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { RetrieveUserDto } from '../users/dto/retrieve-user.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -26,8 +26,7 @@ export class AuthService {
 
     if (!user) throw new UnauthorizedException(['email Unknown email']);
 
-    const password = hash.sha256().update(loginDto.password).digest('hex');
-    if (user.password !== password)
+    if (!bcrypt.compareSync(loginDto.password, user.password))
       throw new UnauthorizedException(['password Incorrect password']);
 
     const token = await this.createToken(user);
@@ -39,12 +38,13 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto) {
-    const password = hash.sha256().update(registerDto.password).digest('hex');
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(registerDto.password, salt);
 
     const user = await this.prismaService.user.create({
       data: {
         email: registerDto.email,
-        password,
+        password: hashedPassword,
       },
     });
 
