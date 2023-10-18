@@ -8,8 +8,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { NotesService } from '../notes/notes.service';
 import { UsersContactsController } from './users-contacts.controller';
 import { ContactsService } from '../contacts/contacts.service';
-import { UsersMeController } from './user-me.controller';
+import { UsersMeController } from './users-me.controller';
 import { AuthService } from '../auth/auth.service';
+import { UsersMeNotesController } from './users-me-notes.controller';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthService } from '../auth/auth.service';
     }),
   ],
   controllers: [
+    UsersMeNotesController,
     UsersNotesController,
     UsersContactsController,
     UsersMeController,

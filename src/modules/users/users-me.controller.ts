@@ -6,6 +6,7 @@ import {
   Res,
   Body,
   Patch,
+  Post,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
@@ -20,6 +21,7 @@ import { UsersService } from './users.service';
 import { AuthService } from '../auth/auth.service';
 import { plainToClass } from 'class-transformer';
 import authCookieOptions from '../auth/auth-cookie-options';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @ApiTags('users-me')
 @Controller('users/me')
@@ -65,5 +67,16 @@ export class UsersMeController {
     response.send(plainToClass(RetrieveUserDto, newUser));
 
     return newUser;
+  }
+
+  @Post('change-password')
+  @UseGuards(AuthGuard)
+  async ChangePassword(
+    @Body() changePasswordDto: ChangePasswordDto,
+    @Request() request: RequestWithUser,
+  ): Promise<RetrieveUserDto> {
+    const user = request.user;
+
+    return this.userService.changePassword(user.id, changePasswordDto);
   }
 }

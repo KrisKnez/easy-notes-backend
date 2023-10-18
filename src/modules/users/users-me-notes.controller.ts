@@ -17,15 +17,14 @@ import { CreateUserNoteDto } from './dto/create-user-note.dto';
 import { NotesService } from '../notes/notes.service';
 import { UpdateNoteDto } from '../notes/dto/update-note.dto';
 
-@ApiTags('users-notes')
-@Controller('users/:userId/notes')
+@ApiTags('users-me-notes')
+@Controller('users/me/notes')
 @UseGuards(AuthGuard)
-export class UsersNotesController {
+export class UsersMeNotesController {
   constructor(private notesService: NotesService) {}
 
   @Post()
   async createUserNote(
-    @Param('userId') userId: string,
     @Body() createUserNoteDto: CreateUserNoteDto,
     @Request() request: RequestWithUser,
   ): Promise<RetrieveNoteDto> {
@@ -37,7 +36,6 @@ export class UsersNotesController {
 
   @Get()
   async findAllUserNotes(
-    @Param('userId') userId: string,
     @Request() request: RequestWithUser,
   ): Promise<RetrieveNoteDto[]> {
     return await this.notesService.findAll({
@@ -47,7 +45,6 @@ export class UsersNotesController {
 
   @Get(':id')
   async findOneUserNote(
-    @Param('userId') userId: string,
     @Param('id') id: string,
     @Request() request: RequestWithUser,
   ): Promise<RetrieveNoteDto> {
@@ -59,7 +56,6 @@ export class UsersNotesController {
 
   @Patch(':id')
   async updateUserNote(
-    @Param('userId') userId: string,
     @Param('id') id: string,
     @Body() updateNoteDto: UpdateNoteDto,
     @Request() request: RequestWithUser,
@@ -72,7 +68,6 @@ export class UsersNotesController {
 
   @Delete(':id')
   async removeUserNote(
-    @Param('userId') userId: string,
     @Param('id') id: string,
     @Request() request: RequestWithUser,
   ): Promise<RetrieveNoteDto> {
