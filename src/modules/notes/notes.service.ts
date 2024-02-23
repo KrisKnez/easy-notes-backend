@@ -4,7 +4,6 @@ import { UpdateNoteDto } from './dto/update-note.dto';
 import { RetrieveNoteDto } from './dto/retrieve-note.dto';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { FilterNoteDto } from './dto/filter-note.dto';
-import { FindNoteDto } from './dto/find-note.dto';
 
 @Injectable()
 export class NotesService {
@@ -31,16 +30,49 @@ export class NotesService {
     });
   }
 
-  async update(findNoteDto: FindNoteDto, updateNoteDto: UpdateNoteDto) {
+  async update(
+    id: number,
+    updateNoteDto: UpdateNoteDto,
+    filterNoteDto?: FilterNoteDto,
+  ) {
     return this.prismaService.note.update({
-      where: findNoteDto,
+      where: {
+        id,
+        ...filterNoteDto,
+      },
       data: updateNoteDto,
     });
   }
 
-  async remove(findNoteDto: FindNoteDto) {
+  async remove(id: number, filterNoteDto?: FilterNoteDto) {
     return this.prismaService.note.delete({
-      where: findNoteDto,
+      where: { id, ...filterNoteDto },
+    });
+  }
+
+  // Search by title and content
+  async search(
+    search: string,
+    filterNoteDto?: FilterNoteDto,
+  ): Promise<RetrieveNoteDto[]> {
+    return this.prismaService.note.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            content: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+        ],
+        ...filterNoteDto,
+      },
     });
   }
 }

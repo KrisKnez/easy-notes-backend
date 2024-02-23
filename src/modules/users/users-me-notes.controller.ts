@@ -8,14 +8,15 @@ import {
   Request,
   UseGuards,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { RequestWithUser } from '../auth/entities/request-with-user';
 import { RetrieveNoteDto } from '../notes/dto/retrieve-note.dto';
 import { CreateUserNoteDto } from './dto/create-user-note.dto';
-import { NotesService } from '../notes/notes.service';
 import { UpdateNoteDto } from '../notes/dto/update-note.dto';
+import { NotesService } from '../notes/notes.service';
 
 @ApiTags('users-me-notes')
 @Controller('users/me/notes')
@@ -43,6 +44,14 @@ export class UsersMeNotesController {
     });
   }
 
+  @Get('search')
+  searchUserNotes(
+    @Query('term') term: string,
+    @Request() request: RequestWithUser,
+  ) {
+    return this.notesService.search(term, { userId: request.user.id });
+  }
+
   @Get(':id')
   async findOneUserNote(
     @Param('id') id: string,
@@ -60,10 +69,9 @@ export class UsersMeNotesController {
     @Body() updateNoteDto: UpdateNoteDto,
     @Request() request: RequestWithUser,
   ): Promise<RetrieveNoteDto> {
-    return this.notesService.update(
-      { id: +id, userId: request.user.id },
-      updateNoteDto,
-    );
+    return this.notesService.update(+id, updateNoteDto, {
+      userId: request.user.id,
+    });
   }
 
   @Delete(':id')
@@ -71,6 +79,6 @@ export class UsersMeNotesController {
     @Param('id') id: string,
     @Request() request: RequestWithUser,
   ): Promise<RetrieveNoteDto> {
-    return this.notesService.remove({ id: +id, userId: request.user.id });
+    return this.notesService.remove(+id, { userId: request.user.id });
   }
 }

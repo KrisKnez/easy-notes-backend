@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { PrismaService } from 'src/services/prisma/prisma.service';
-import { UsersNotesController } from './users-notes.controller';
 
 import { JwtModule } from '@nestjs/jwt';
 import { NotesService } from '../notes/notes.service';
@@ -21,7 +20,6 @@ import { UsersMeNotesController } from './users-me-notes.controller';
   ],
   controllers: [
     UsersMeNotesController,
-    UsersNotesController,
     UsersContactsController,
     UsersMeController,
     UsersController,
