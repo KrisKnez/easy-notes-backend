@@ -32,17 +32,7 @@ async function bootstrap() {
     }),
   );
 
-  SwaggerModule.setup('api', app, document, {
-    customCssUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui.min.css',
-    customJs: [
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui-bundle.min.js',
-      // 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui-es-bundle.min.js',
-      // 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui-es-bundle-core.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui-standalone-preset.min.js',
-    ],
-  });
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
 }
