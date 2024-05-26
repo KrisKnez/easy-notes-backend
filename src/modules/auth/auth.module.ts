@@ -2,13 +2,12 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
-import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    PassportModule,
     JwtModule.register({
+      global: true,
       secret: 'asd',
       signOptions: { expiresIn: '1800s' },
     }),

@@ -12,23 +12,26 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/guards/auth.guard';
-import { RequestWithUser } from '../auth/entities/request-with-user';
-import { RetrieveNoteDto } from '../notes/dto/retrieve-note.dto';
-import { CreateUserNoteDto } from './dto/create-user-note.dto';
+import { RequestWithUser } from '../auth/types/request-with-user';
+import { NoteDto } from '../notes/dto/note.dto';
 import { UpdateNoteDto } from '../notes/dto/update-note.dto';
 import { NotesService } from '../notes/notes.service';
+import { SortNotesDto } from '../notes/dto/sort-notes.dto';
+import { FilterNotesDto } from '../notes/dto/filter-notes.dto';
+import { CreateUserNoteDto } from '../users/dto/create-user-note.dto';
+import FilterUserNotesDto from '../users/dto/filter-user-notes.dto';
 
-@ApiTags('users-me-notes')
-@Controller('users/me/notes')
+@ApiTags('me-notes')
+@Controller('me/notes')
 @UseGuards(AuthGuard)
-export class UsersMeNotesController {
+export class MeNotesController {
   constructor(private notesService: NotesService) {}
 
   @Post()
   async createUserNote(
     @Body() createUserNoteDto: CreateUserNoteDto,
     @Request() request: RequestWithUser,
-  ): Promise<RetrieveNoteDto> {
+  ): Promise<NoteDto> {
     return await this.notesService.create({
       ...createUserNoteDto,
       userId: request.user.id,
@@ -38,29 +41,26 @@ export class UsersMeNotesController {
   @Get()
   async findAllUserNotes(
     @Request() request: RequestWithUser,
-  ): Promise<RetrieveNoteDto[]> {
-    return await this.notesService.findAll({
-      userId: request.user.id,
-    });
-  }
-
-  @Get('search')
-  searchUserNotes(
-    @Query('term') term: string,
-    @Request() request: RequestWithUser,
-  ) {
-    return this.notesService.search(term, { userId: request.user.id });
+    @Query() sortNotesDto: SortNotesDto,
+    @Query() filterUserNotesDto: FilterUserNotesDto,
+  ): Promise<NoteDto[]> {
+    return await this.notesService.findAll(
+      sortNotesDto,
+      filterUserNotesDto.toFilterNotesDto(request.user.id),
+    );
   }
 
   @Get(':id')
   async findOneUserNote(
     @Param('id') id: string,
     @Request() request: RequestWithUser,
-  ): Promise<RetrieveNoteDto> {
-    return await this.notesService.findOne({
-      id: +id,
-      userId: request.user.id,
-    });
+  ): Promise<NoteDto> {
+    return await this.notesService.findOne(
+      new FilterNotesDto({
+        idEquals: +id,
+        userIdEquals: request.user.id,
+      }),
+    );
   }
 
   @Patch(':id')
@@ -68,7 +68,7 @@ export class UsersMeNotesController {
     @Param('id') id: string,
     @Body() updateNoteDto: UpdateNoteDto,
     @Request() request: RequestWithUser,
-  ): Promise<RetrieveNoteDto> {
+  ): Promise<NoteDto> {
     return this.notesService.update(+id, updateNoteDto, {
       userId: request.user.id,
     });
@@ -78,7 +78,7 @@ export class UsersMeNotesController {
   async removeUserNote(
     @Param('id') id: string,
     @Request() request: RequestWithUser,
-  ): Promise<RetrieveNoteDto> {
+  ): Promise<NoteDto> {
     return this.notesService.remove(+id, { userId: request.user.id });
   }
 }

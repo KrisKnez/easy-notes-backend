@@ -35,5 +35,18 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
+
+  // Modify the document to fix the @ApiQuery issue
+  for (const path of Object.values(document.paths)) {
+    for (const operation of Object.values(path)) {
+      if (operation.parameters) {
+        for (const parameter of operation.parameters) {
+          if (parameter.content) {
+            delete parameter.schema;
+          }
+        }
+      }
+    }
+  }
 }
 bootstrap();

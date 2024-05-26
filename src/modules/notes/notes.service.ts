@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { RetrieveNoteDto } from './dto/retrieve-note.dto';
+import { NoteDto } from './dto/note.dto';
 import { PrismaService } from 'src/services/prisma/prisma.service';
-import { FilterNoteDto } from './dto/filter-note.dto';
+import { Prisma } from '@prisma/client';
+import { SortNotesDto } from './dto/sort-notes.dto';
+import { FilterNotesDto } from './dto/filter-notes.dto';
 
 @Injectable()
 export class NotesService {
@@ -15,46 +17,47 @@ export class NotesService {
     });
   }
 
-  async findAll(filterNoteDto: FilterNoteDto): Promise<RetrieveNoteDto[]> {
+  async findAll(
+    sortNotesDto: SortNotesDto,
+    filterNotesDto: FilterNotesDto,
+  ): Promise<NoteDto[]> {
     return this.prismaService.note.findMany({
-      where: filterNoteDto,
-      orderBy: {
-        id: 'asc',
-      },
+      where: filterNotesDto.toPrismaObject(),
+      orderBy: sortNotesDto.toPrismaObject(),
     });
   }
 
-  async findOne(filterNoteDto: FilterNoteDto): Promise<RetrieveNoteDto> {
+  async findOne(filterNotesDto: FilterNotesDto): Promise<NoteDto> {
     return this.prismaService.note.findFirstOrThrow({
-      where: filterNoteDto,
+      where: filterNotesDto.toPrismaObject(),
     });
   }
 
   async update(
     id: number,
     updateNoteDto: UpdateNoteDto,
-    filterNoteDto?: FilterNoteDto,
+    noteWhereInput?: Prisma.NoteWhereInput,
   ) {
     return this.prismaService.note.update({
       where: {
+        ...noteWhereInput,
         id,
-        ...filterNoteDto,
       },
       data: updateNoteDto,
     });
   }
 
-  async remove(id: number, filterNoteDto?: FilterNoteDto) {
+  async remove(id: number, noteWhereInput?: Prisma.NoteWhereInput) {
     return this.prismaService.note.delete({
-      where: { id, ...filterNoteDto },
+      where: { ...noteWhereInput, id },
     });
   }
 
   // Search by title and content
   async search(
     search: string,
-    filterNoteDto?: FilterNoteDto,
-  ): Promise<RetrieveNoteDto[]> {
+    noteWhereInput?: Prisma.NoteWhereInput,
+  ): Promise<NoteDto[]> {
     return this.prismaService.note.findMany({
       where: {
         OR: [
@@ -71,7 +74,7 @@ export class NotesService {
             },
           },
         ],
-        ...filterNoteDto,
+        ...noteWhereInput,
       },
     });
   }

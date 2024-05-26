@@ -15,12 +15,12 @@ import { RequestWithUser } from '../auth/types/request-with-user';
 import { ContactsService } from '../contacts/contacts.service';
 import { RetrieveContactDto } from '../contacts/dto/retrieve-contact.dto';
 import { UpdateContactDto } from '../contacts/dto/update-contact.dto';
-import { CreateUserContactDto } from './dto/create-user-contact';
+import { CreateUserContactDto } from '../users/dto/create-user-contact';
 
-@ApiTags('users-contacts')
-@Controller('users/contacts')
+@ApiTags('me-contacts')
+@Controller('me/contacts')
 @UseGuards(AuthGuard)
-export class UsersContactsController {
+export class MeContactsController {
   constructor(private contactService: ContactsService) {}
 
   @Post()
