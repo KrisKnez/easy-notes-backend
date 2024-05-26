@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 
-function generateSortOptions(scalarFieldEnum): string[] {
+function getSortOptionsFromEnum(scalarFieldEnum): string[] {
   const sortOrders: Prisma.SortOrder[] = Object.values(Prisma.SortOrder);
   const fields: string[] = Object.values(scalarFieldEnum);
   const result: string[] = [];
@@ -14,4 +14,4 @@ function generateSortOptions(scalarFieldEnum): string[] {
   return result;
 }
 
-export default generateSortOptions;
+export default getSortOptionsFromEnum;

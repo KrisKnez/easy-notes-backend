@@ -2,15 +2,15 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { Transform } from 'class-transformer';
 import { IsEnum, IsOptional } from 'class-validator';
-import generateSortOptions from 'src/utils/generateOrderByStringsFromEnum';
+import getSortOptionsFromEnum from 'src/utils/get-sort-options-from-enum';
 
 export class SortNotesDto {
   @ApiPropertyOptional({
-    enum: generateSortOptions(Prisma.NoteScalarFieldEnum),
+    enum: getSortOptionsFromEnum(Prisma.NoteScalarFieldEnum),
     isArray: true,
   })
   @Transform(({ value }) => (typeof value === 'string' ? [value] : value))
-  @IsEnum(generateSortOptions(Prisma.NoteScalarFieldEnum), { each: true })
+  @IsEnum(getSortOptionsFromEnum(Prisma.NoteScalarFieldEnum), { each: true })
   @IsOptional()
   orderBy?: string[];
 
