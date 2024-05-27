@@ -16,9 +16,9 @@ import { AuthService } from '../auth/auth.service';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { RequestWithUser } from '../auth/types/request-with-user';
 import authCookieOptions from '../auth/auth-cookie-options';
-import { UsersService } from 'modules/feature/users/users.service';
-import { UserDto } from 'modules/feature/users/dto/user.dto';
-import { UpdateUserDto } from 'modules/feature/users/dto/update-user.dto';
+import { UsersService } from '~/modules/feature/users/users.service';
+import { UserDto } from '~/modules/feature/users/dto/user.dto';
+import { UpdateUserDto } from '~/modules/feature/users/dto/update-user.dto';
 
 @Controller('me')
 @ApiTags('me')

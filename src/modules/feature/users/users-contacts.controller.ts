@@ -14,8 +14,8 @@ import { ContactsService } from '../contacts/contacts.service';
 import { RetrieveContactDto } from '../contacts/dto/retrieve-contact.dto';
 import { UpdateContactDto } from '../contacts/dto/update-contact.dto';
 import { CreateUserContactDto } from './dto/create-user-contact';
-import { AuthGuard } from 'modules/core/auth/guards/auth.guard';
-import { RequestWithUser } from 'modules/core/auth/types/request-with-user';
+import { AuthGuard } from '@nestjs/passport';
+import { RequestWithUser } from '~/modules/core/auth/types/request-with-user';
 
 @ApiTags('users-contacts')
 @Controller('users/contacts')

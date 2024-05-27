@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { UserDto } from 'modules/feature/users/dto/user.dto';
+import { UserDto } from '~/modules/feature/users/dto/user.dto';
 
 export class AuthTokenDto {
   @Transform(({ value }) => new UserDto(value))

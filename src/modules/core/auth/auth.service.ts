@@ -11,8 +11,8 @@ import { RegisterDto } from './dto/register.dto';
 
 import { AuthTokenDto } from './dto/auth-token.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { PrismaService } from 'shared/services/prisma/prisma.service';
-import { UserDto } from 'modules/feature/users/dto/user.dto';
+import { PrismaService } from '~/shared/services/prisma/prisma.service';
+import { UserDto } from '~/modules/feature/users/dto/user.dto';
 
 @Injectable()
 export class AuthService {

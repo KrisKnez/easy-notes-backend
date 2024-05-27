@@ -3,8 +3,8 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 
 import { ContactsService } from '../contacts/contacts.service';
-import { PrismaService } from 'shared/services/prisma/prisma.service';
-import { AuthService } from 'modules/core/auth/auth.service';
+import { PrismaService } from '~/shared/services/prisma/prisma.service';
+import { AuthService } from '~/modules/core/auth/auth.service';
 
 @Module({
   imports: [],

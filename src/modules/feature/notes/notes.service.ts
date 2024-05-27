@@ -5,7 +5,7 @@ import { NoteDto } from './dto/note.dto';
 import { Prisma } from '@prisma/client';
 import { SortNotesDto } from './dto/sort-notes.dto';
 import { FilterNotesDto } from './dto/filter-notes.dto';
-import { PrismaService } from 'shared/services/prisma/prisma.service';
+import { PrismaService } from '~/shared/services/prisma/prisma.service';
 
 @Injectable()
 export class NotesService {

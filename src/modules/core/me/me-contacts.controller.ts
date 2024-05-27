@@ -12,10 +12,10 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { RequestWithUser } from '../auth/types/request-with-user';
-import { ContactsService } from 'modules/feature/contacts/contacts.service';
-import { CreateUserContactDto } from 'modules/feature/users/dto/create-user-contact';
-import { RetrieveContactDto } from 'modules/feature/contacts/dto/retrieve-contact.dto';
-import { UpdateContactDto } from 'modules/feature/contacts/dto/update-contact.dto';
+import { ContactsService } from '~/modules/feature/contacts/contacts.service';
+import { CreateUserContactDto } from '~/modules/feature/users/dto/create-user-contact';
+import { RetrieveContactDto } from '~/modules/feature/contacts/dto/retrieve-contact.dto';
+import { UpdateContactDto } from '~/modules/feature/contacts/dto/update-contact.dto';
 
 @ApiTags('me-contacts')
 @Controller('me/contacts')

@@ -5,7 +5,7 @@ import { FilterUserDto } from './dto/filter-user.dto';
 import { UserDto } from './dto/user.dto';
 
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from 'shared/services/prisma/prisma.service';
+import { PrismaService } from '~/shared/services/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
