@@ -1,7 +1,7 @@
 {
   "version": 2,
   "framework": null,
-  "buildCommand": "prisma generate && nest build",
+  "buildCommand": "prisma generate && nest build && ls && ls dist",
   "builds": [
     {
       "src": "src/main.ts",
@@ -14,7 +14,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "dist/main.js",
+      "dest": "dist/dist/main.js",
       "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
       "headers": {
         "Cache-Control": "no-store"
