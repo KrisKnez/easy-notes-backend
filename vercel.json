@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "framework": "",
+  "framework": null,
   "buildCommand": "prisma generate && nest build",
   "builds": [
     {
