@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MeController } from './me.controller';
-import { AuthService } from '../auth/auth.service';
-import { UsersService } from '../users/users.service';
-import { PrismaService } from 'src/services/prisma/prisma.service';
-import { AuthModule } from '../auth/auth.module';
 import { MeNotesController } from './me-notes.controller';
-import { NotesService } from '../notes/notes.service';
 import { MeContactsController } from './me-contacts.controller';
-import { ContactsService } from '../contacts/contacts.service';
+import { AuthModule } from '../auth/auth.module';
+import { AuthService } from '../auth/auth.service';
+import { PrismaService } from 'shared/services/prisma/prisma.service';
+import { UsersService } from 'modules/feature/users/users.service';
+import { NotesService } from 'modules/feature/notes/notes.service';
+import { ContactsService } from 'modules/feature/contacts/contacts.service';
 
 @Module({
   imports: [AuthModule],

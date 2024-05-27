@@ -10,12 +10,12 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
-import { UserDto } from '../users/dto/user.dto';
 import { AuthGuard } from './guards/auth.guard';
 import { RequestWithUser } from './types/request-with-user';
 import { RegisterDto } from './dto/register.dto';
 import authCookieOptions from './auth-cookie-options';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { UserDto } from 'modules/feature/users/dto/user.dto';
 
 @ApiTags('auth')
 @Controller('auth')

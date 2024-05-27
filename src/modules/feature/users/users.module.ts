@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { PrismaService } from 'src/services/prisma/prisma.service';
 
 import { ContactsService } from '../contacts/contacts.service';
-import { AuthService } from '../auth/auth.service';
+import { PrismaService } from 'shared/services/prisma/prisma.service';
+import { AuthService } from 'modules/core/auth/auth.service';
 
 @Module({
   imports: [],

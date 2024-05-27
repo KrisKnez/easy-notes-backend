@@ -9,16 +9,16 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 
-import { UsersService } from '../users/users.service';
+import * as cookie from 'cookie';
+import { plainToClass } from 'class-transformer';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from '../auth/auth.service';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { RequestWithUser } from '../auth/types/request-with-user';
-import { UserDto } from '../users/dto/user.dto';
-import * as cookie from 'cookie';
-import { plainToClass } from 'class-transformer';
 import authCookieOptions from '../auth/auth-cookie-options';
-import { ApiTags } from '@nestjs/swagger';
-import { UpdateUserDto } from '../users/dto/update-user.dto';
+import { UsersService } from 'modules/feature/users/users.service';
+import { UserDto } from 'modules/feature/users/dto/user.dto';
+import { UpdateUserDto } from 'modules/feature/users/dto/update-user.dto';
 
 @Controller('me')
 @ApiTags('me')

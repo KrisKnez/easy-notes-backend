@@ -4,15 +4,15 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
-import { PrismaService } from 'src/services/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 
 import * as bcrypt from 'bcrypt';
-import { UserDto } from '../users/dto/user.dto';
 import { RegisterDto } from './dto/register.dto';
 
 import { AuthTokenDto } from './dto/auth-token.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { PrismaService } from 'shared/services/prisma/prisma.service';
+import { UserDto } from 'modules/feature/users/dto/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -80,7 +80,9 @@ export class AuthService {
 
   async validateToken(authToken: string): Promise<AuthTokenDto> {
     const authTokenVerified = this.jwtService.verify(authToken);
-    const decodedToken = new AuthTokenDto(authTokenVerified);
+    const decodedToken = new AuthTokenDto({
+      user: new UserDto(authTokenVerified.user),
+    });
 
     return decodedToken;
   }

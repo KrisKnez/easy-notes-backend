@@ -2,7 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { Transform } from 'class-transformer';
 import { IsEnum, IsOptional } from 'class-validator';
-import getSortOptionsFromEnum from '../../../utils/get-sort-options-from-enum';
+import getSortOptionsFromEnum from 'shared/utils/get-sort-options-from-enum';
 
 export class SortNotesDto {
   @ApiPropertyOptional({

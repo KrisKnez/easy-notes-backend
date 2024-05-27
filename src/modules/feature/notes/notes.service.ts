@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { NoteDto } from './dto/note.dto';
-import { PrismaService } from 'src/services/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { SortNotesDto } from './dto/sort-notes.dto';
 import { FilterNotesDto } from './dto/filter-notes.dto';
+import { PrismaService } from 'shared/services/prisma/prisma.service';
 
 @Injectable()
 export class NotesService {

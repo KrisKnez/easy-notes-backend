@@ -1,5 +1,5 @@
 import { OmitType } from '@nestjs/swagger';
-import { FilterNotesDto } from 'src/modules/notes/dto/filter-notes.dto';
+import { FilterNotesDto } from '../../notes/dto/filter-notes.dto';
 
 class FilterUserNotesDto extends OmitType(FilterNotesDto, [
   'userIdEquals',
