@@ -31,12 +31,12 @@ export class AuthService {
       },
     });
 
-    const userDto = UserDto.fromEntity(user);
-
     if (!user) throw new UnauthorizedException(['email Unknown email']);
 
     if (!bcrypt.compareSync(loginDto.password, user.password))
       throw new UnauthorizedException(['password Incorrect password']);
+
+    const userDto = UserDto.fromEntity(user);
 
     const token = await this.createToken(userDto);
 
