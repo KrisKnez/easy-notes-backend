@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "NodeNext",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -19,7 +19,7 @@
     "resolveJsonModule": true,
 
     // Path aliases
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "paths": {
       "~/*": ["./src/*"]
     }
