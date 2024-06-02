@@ -47,7 +47,11 @@ export const getBootstrapApp = async () => {
     }),
   );
 
-  SwaggerModule.setup('api', app, document);
+  if (
+    (process.env.NODE_ENV || process.env.VERCEL_END || 'development') ===
+    'development'
+  )
+    SwaggerModule.setup('api', app, document);
 
   fixApiQuery(document);
 
