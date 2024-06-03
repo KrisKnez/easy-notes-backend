@@ -1,6 +1,6 @@
 // /vercel-func.js
 import { HttpAdapterHost } from '@nestjs/core';
-import { getBootstrapApp } from './dist/bootstrap';
+import { getBootstrapApp } from './dist/src/bootstrap';
 
 // Keep the app instance in memory for subsequent requests
 let app;

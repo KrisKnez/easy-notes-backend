@@ -47,10 +47,7 @@ export const getBootstrapApp = async () => {
     }),
   );
 
-  if (
-    (process.env.NODE_ENV || process.env.VERCEL_END || 'development') ===
-    'development'
-  )
+  if ((process.env.VERCEL_ENV || process.env.NODE_ENV) !== 'production')
     SwaggerModule.setup('api', app, document);
 
   fixApiQuery(document);
