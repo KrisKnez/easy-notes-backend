@@ -104,15 +104,15 @@ export class AuthService {
         id,
       },
     });
-    if (!bcrypt.compareSync(changePasswordDto.newPassword, user.password))
+
+    if (!bcrypt.compareSync(changePasswordDto.currentPassword, user.password))
       throw new BadRequestException(['currentPassword Incorrect password']);
 
     // Process with update
     try {
-      const salt = bcrypt.genSaltSync(10);
       const hashedNewPassword = bcrypt.hashSync(
         changePasswordDto.newPassword,
-        salt,
+        bcrypt.genSaltSync(10),
       );
 
       const user = await this.prismaService.user.update({
