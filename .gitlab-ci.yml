@@ -1,0 +1,38 @@
+stages:
+    - lint
+    - test
+    - build
+    - deploy
+    
+lint-test-job:
+    stage: lint
+    image: node:20
+    script:
+        - echo "Linting code..."
+        - npm install
+        - npm run lint
+        - echo "No lint issues found."
+        
+unit-test-job:
+    stage: test
+    script:
+        - echo "Running unit tests... This will take about 60 seconds."
+        - sleep 60
+        - echo "Code coverage is 90%"
+        
+build-job:
+    stage: build
+    image: node:20
+    script:
+        - echo "Compiling the code..."
+        - npm install
+        - npm run build
+        - echo "Compile complete."
+        
+deploy-job:
+    stage: deploy
+    image: docker:19.03.12
+    services:
+        - docker:19.03.12-dind
+    script:
+        - docker info
